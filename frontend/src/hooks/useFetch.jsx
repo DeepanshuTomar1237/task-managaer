@@ -12,7 +12,7 @@ const useFetch = () => {
     errorMsg: "",  // Stores error message to be displayed in toast
   });
 
-  // useCallback hook ensures that the fetchData function doesn't get recreated on every render
+  // 1useCallback hook ensures that the fetchData function doesn't get recreated on every render
   const fetchData = useCallback(async (config, otherOptions) => {
     const { showSuccessToast = true, showErrorToast = true } = otherOptions || {};  // Default to showing toasts for success and error
 
