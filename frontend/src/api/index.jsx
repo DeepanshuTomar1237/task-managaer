@@ -1,4 +1,3 @@
-// Importing axios library for making HTTP requests
 import axios from "axios";
 
 // Creating an axios instance with a predefined base URL for API requests
@@ -7,5 +6,4 @@ const api = axios.create({
   baseURL: "/api",
 });
 
-// Exporting the axios instance for use in other parts of the application
 export default api;

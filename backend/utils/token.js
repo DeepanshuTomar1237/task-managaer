@@ -1,5 +1,5 @@
-const jwt = require("jsonwebtoken"); // Import JSON Web Token (JWT) library
-const { ACCESS_TOKEN_SECRET } = process.env; // Retrieve the secret key from environment variables
+const jwt = require("jsonwebtoken");
+const { ACCESS_TOKEN_SECRET } = process.env; 
 
 /**
  * Generates an access token using JWT

@@ -1,4 +1,4 @@
-// Importing React library for JSX usage
+
 import React from 'react'
 
 // Loader component to display a spinning loader animation
@@ -14,5 +14,4 @@ const Loader = () => {
   )
 }
 
-// Exporting the Loader component for use in other parts of the app
 export default Loader

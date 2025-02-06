@@ -1,4 +1,4 @@
-const mongoose = require("mongoose"); // Import Mongoose for MongoDB-related operations
+const mongoose = require("mongoose");
 
 /**
  * Validates an email address using a regular expression pattern
@@ -23,6 +23,6 @@ const validateObjectId = (string) => {
 }
 
 module.exports = {
-  validateEmail, // Export the email validation function
-  validateObjectId, // Export the ObjectId validation function
+  validateEmail, 
+  validateObjectId,
 }

@@ -1,19 +1,18 @@
-import { LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT, SAVE_PROFILE } from "../actions/actionTypes"; // Importing action types for authentication
+import { LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT, SAVE_PROFILE } from "../actions/actionTypes"; 
 
-// Initial state for the auth reducer, which contains default values for user, token, and loading/error states
 const initialState = {
-  loading: false, // Represents the loading state during login or profile fetch
-  user: {}, // Contains user information once logged in
-  isLoggedIn: false, // Tracks if the user is logged in or not
-  token: "", // The token used for authentication and storing in localStorage
-  successMsg: "", // Stores success messages (for example, login success message)
-  errorMsg: "", // Stores error messages if any error occurs during authentication
+  loading: false,
+  user: {},
+  isLoggedIn: false,
+  token: "", 
+  successMsg: "", 
+  errorMsg: "",
 };
 
 // The authReducer function handles actions related to user authentication
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    // Case when the login request is initiated
+    
     case LOGIN_REQUEST:
       return { 
         loading: true, 
@@ -28,11 +27,11 @@ const authReducer = (state = initialState, action) => {
     case LOGIN_SUCCESS:
       return { 
         loading: false, 
-        user: action.payload.user, // User data from the successful login response
-        isLoggedIn: true, // User is now logged in
-        token: action.payload.token, // Storing the token to authenticate further requests
-        successMsg: action.payload.msg, // Success message returned by the server
-        errorMsg: "", // No error in this case
+        user: action.payload.user, 
+        isLoggedIn: true, 
+        token: action.payload.token, 
+        successMsg: action.payload.msg, 
+        errorMsg: "", 
       };
 
     // Case when login fails
@@ -43,7 +42,7 @@ const authReducer = (state = initialState, action) => {
         isLoggedIn: false, 
         token: "", 
         successMsg: "", 
-        errorMsg: action.payload.msg, // Error message returned from the API or default error
+        errorMsg: action.payload.msg, 
       };
 
     // Case when the user logs out
@@ -51,7 +50,7 @@ const authReducer = (state = initialState, action) => {
       return { 
         loading: false, 
         user: {}, 
-        isLoggedIn: false, // The user is now logged out
+        isLoggedIn: false,
         token: "", 
         successMsg: "", 
         errorMsg: "", 
@@ -61,14 +60,13 @@ const authReducer = (state = initialState, action) => {
     case SAVE_PROFILE:
       return { 
         loading: false, 
-        user: action.payload.user, // User data from the profile fetch request
-        isLoggedIn: true, // User is logged in after saving the profile
-        token: action.payload.token, // Storing the token
+        user: action.payload.user, 
+        isLoggedIn: true, 
+        token: action.payload.token, 
         successMsg: "", 
         errorMsg: "", 
       };
 
-    // Default case to return the current state if no recognized action is found
     default:
       return state;
   }

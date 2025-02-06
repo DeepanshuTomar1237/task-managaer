@@ -1,4 +1,3 @@
-// Importing React library for JSX usage
 import React from 'react'
 
 // Input component for rendering a text input field

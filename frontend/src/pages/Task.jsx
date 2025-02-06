@@ -1,15 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react'; // Importing necessary hooks and dependencies
-import { useSelector } from 'react-redux'; // Importing useSelector to access the Redux state
-import { Link } from 'react-router-dom'; // Importing Link to navigate to the task details page
-import useFetch from '../hooks/useFetch'; // Custom hook for making API calls
-import Loader from './utils/Loader'; // Component to show loading spinner
-import Tooltip from './utils/Tooltip'; // Tooltip component for showing additional info on icons
+import React, { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux'; 
+import { Link } from 'react-router-dom'; 
+import useFetch from '../hooks/useFetch';
+import Loader from './utils/Loader'; 
+import Tooltip from './utils/Tooltip'; 
 
 const Tasks = () => {
   // Accessing the auth state from Redux to get user authentication info
   const authState = useSelector((state) => state.authReducer);
   
-  // State to store the list of tasks and the new task data
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState({
     description: '',
@@ -17,12 +16,11 @@ const Tasks = () => {
     priority: 'Medium',
   });
   
-  // Using custom fetch hook to handle API calls
+  
   const [fetchData, { loading }] = useFetch();
 
   // Function to fetch all tasks for the logged-in user
   const fetchTasks = useCallback(() => {
-    // Configuration for the GET request to fetch tasks
     const config = { 
       url: '/tasks', 
       method: 'get', 
@@ -32,30 +30,28 @@ const Tasks = () => {
     fetchData(config, { showSuccessToast: false }).then((data) => setTasks(data.tasks));
   }, [authState.token, fetchData]);
 
-  // useEffect hook to fetch tasks whenever the user logs in or the authState changes
   useEffect(() => {
-    if (!authState.isLoggedIn) return; // Do nothing if the user is not logged in
-    fetchTasks(); // Fetch tasks if the user is logged in
+    if (!authState.isLoggedIn) return; 
+    fetchTasks(); 
   }, [authState.isLoggedIn, fetchTasks]);
 
-  // Function to handle deleting a task
   const handleDelete = (id) => {
     const config = { 
       url: `/tasks/${id}`, 
       method: 'delete', 
       headers: { Authorization: authState.token } 
     };
-    // Call the delete request, then re-fetch tasks
+    
     fetchData(config).then(() => fetchTasks());
   };
 
-  // Function to handle adding a new task
+  
   const handleAddTask = () => {
     const config = {
       url: '/tasks', 
       method: 'post', 
       headers: { Authorization: authState.token }, 
-      data: newTask // Data to be posted for creating a new task
+      data: newTask 
     };
     // Make the POST request, reset the new task form, and re-fetch tasks
     fetchData(config).then(() => {
@@ -69,7 +65,6 @@ const Tasks = () => {
     const today = new Date();
     const taskDueDate = new Date(dueDate);
     
-    // Check if the task is overdue, due today, or in the future
     if (taskDueDate < today) return 'Overdue';
     else if (taskDueDate.toDateString() === today.toDateString()) return 'Present';
     return 'Future';
@@ -79,7 +74,6 @@ const Tasks = () => {
     <div className="my-2 mx-auto max-w-[700px] py-4">
       <h2 className="my-2 ml-2 md:ml-0 text-xl">Your tasks ({tasks.length})</h2>
       
-      {/* Show the loading spinner while fetching tasks */}
       {loading ? (
         <Loader />
       ) : (
@@ -130,7 +124,7 @@ const Tasks = () => {
             <div key={task._id} className="bg-white my-4 p-4 text-gray-600 rounded-md shadow-md">
               <div className="flex">
                 <span className="font-medium">Task #{index + 1}</span>
-                {/* Task status color based on the due date */}
+                
                 <span
                   className={`ml-2 text-sm ${
                     getTaskStatus(task.dueDate) === 'Overdue'

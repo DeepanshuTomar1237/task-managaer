@@ -1,16 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';  // For accessing Redux store state
-import { Link } from 'react-router-dom';  // For routing
-import useFetch from '../hooks/useFetch';  // Custom hook for making API requests
-import Loader from './utils/Loader';  // Loader component to show while fetching data
-import Tooltip from './utils/Tooltip';  // Tooltip component to display tooltips on task actions
-
+import { useSelector } from 'react-redux';  
+import { Link } from 'react-router-dom';  
+import useFetch from '../hooks/useFetch';  
+import Loader from './utils/Loader';  
+import Tooltip from './utils/Tooltip';  
 const Tasks = () => {
 
   const authState = useSelector(state => state.authReducer);  // Access Redux state for authentication status and token
-  const [tasks, setTasks] = useState([]);  // State to store tasks
-  const [fetchData, { loading }] = useFetch();  // Custom hook to handle fetch requests
-
+  const [tasks, setTasks] = useState([]);  
+  const [fetchData, { loading }] = useFetch();  
   // Callback to fetch tasks from the API
   const fetchTasks = useCallback(() => {
     const config = { url: "/tasks", method: "get", headers: { Authorization: authState.token } };
@@ -43,7 +41,7 @@ const Tasks = () => {
       {tasks.length !== 0 && <h2 className='my-2 ml-2 md:ml-0 text-xl'>Your tasks ({tasks.length})</h2>}
       
       {loading ? (
-        <Loader />  // Show loader while tasks are being fetched
+        <Loader />  
       ) : (
         <div>
           {tasks.length === 0 ? (
@@ -64,14 +62,14 @@ const Tasks = () => {
                   {/* Edit button with Tooltip */}
                   <Tooltip text={"Edit this task"} position={"top"}>
                     <Link to={`/tasks/${task._id}`} className='ml-auto mr-2 text-green-600 cursor-pointer'>
-                      <i className="fa-solid fa-pen"></i>  {/* Edit icon */}
+                      <i className="fa-solid fa-pen"></i> 
                     </Link>
                   </Tooltip>
 
                   {/* Delete button with Tooltip */}
                   <Tooltip text={"Delete this task"} position={"top"}>
                     <span className='text-red-500 cursor-pointer' onClick={() => handleDelete(task._id)}>
-                      <i className="fa-solid fa-trash"></i>  {/* Delete icon */}
+                      <i className="fa-solid fa-trash"></i>  
                     </span>
                   </Tooltip>
                 </div>
@@ -79,8 +77,8 @@ const Tasks = () => {
                 <div className='whitespace-pre'>{task.description}</div>  {/* Task description */}
 
                 <div className="text-sm mt-2">
-                  <strong>Priority:</strong> {task.priority} |  {/* Display task priority */}
-                  <strong> Due Date:</strong> {new Date(task.dueDate).toLocaleDateString()}  {/* Display task due date */}
+                  <strong>Priority:</strong> {task.priority} |  
+                  <strong> Due Date:</strong> {new Date(task.dueDate).toLocaleDateString()}  
                 </div>
               </div>
             ))
