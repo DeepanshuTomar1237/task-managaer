@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
@@ -45,16 +45,15 @@ describe("Navbar Component", () => {
     // Click to open the menu
     fireEvent.click(menuButton);
 
-    // Ensure "Login" appears in the menu
-    const loginButton = await screen.findByText(/login/i);
-    expect(loginButton).toBeInTheDocument();
+    // Wait for "Login" to appear in the menu
+    await waitFor(() => expect(screen.getByText(/login/i)).toBeInTheDocument());
 
     // Find and click the close button
     const closeButton = screen.getByTestId("close-menu");
     fireEvent.click(closeButton);
 
     // Ensure menu disappears
-    expect(screen.queryByText(/login/i)).not.toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByText(/login/i)).not.toBeInTheDocument());
   });
 
   test("shows login button when user is not logged in", async () => {
@@ -89,4 +88,3 @@ describe("Navbar Component", () => {
     expect(logoutButtons.length).toBeGreaterThan(0);
   });
 });
-
