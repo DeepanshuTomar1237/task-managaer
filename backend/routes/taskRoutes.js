@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { getTasks, getTask, postTask, putTask, deleteTask } = require("../controllers/taskControllers");
-const { verifyAccessToken } = require("../middlewares.js");
+const { verifyAccessToken } = require("../middlewares/index.js");
 
 // Initialize an Express router for handling task-related routes
 // Requires authentication via verifyAccessToken middleware

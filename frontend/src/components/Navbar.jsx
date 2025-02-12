@@ -1,92 +1,63 @@
-import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import { Provider } from "react-redux";
-import configureStore from "redux-mock-store";
-import { BrowserRouter } from "react-router-dom";
-import Navbar from "../Navbar";
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { logout } from '../redux/actions/authActions';
 
-const mockStore = configureStore([]);
+const Navbar = () => {
 
-describe("Navbar Component", () => {
-  let store;
+  const authState = useSelector(state => state.authReducer);
+  const dispatch = useDispatch();
+  const [isNavbarOpen, setIsNavbarOpen] = useState(false);
+  const toggleNavbar = () => {
+    setIsNavbarOpen(!isNavbarOpen);
+  }
 
-  beforeEach(() => {
-    store = mockStore({
-      authReducer: { isLoggedIn: false },
-    });
-    store.dispatch = jest.fn();
-  });
+  const handleLogoutClick = () => {
+    dispatch(logout());
+  }
 
-  test("renders Navbar correctly", () => {
-    render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <Navbar />
-        </BrowserRouter>
-      </Provider>
-    );
-    expect(screen.getByText(/task manager/i)).toBeInTheDocument();
-  });
+  return (
+    <>
+      <header className='flex justify-between sticky top-0 p-4 bg-white shadow-sm items-center'>
+        <h2 className='cursor-pointer uppercase font-medium'>
+          <Link to="/"> Task Manager </Link>
+        </h2>
+        <ul className='hidden md:flex gap-4 uppercase font-medium'>
+          {authState.isLoggedIn ? (
+            <>
+              <li className="bg-blue-500 text-white hover:bg-blue-600 font-medium rounded-md">
+                <Link to='/tasks/add' className='block w-full h-full px-4 py-2'> <i className="fa-solid fa-plus"></i> Add task </Link>
+              </li>
+              <li className='py-2 px-3 cursor-pointer hover:bg-gray-200 transition rounded-sm' onClick={handleLogoutClick}>Logout</li>
+            </>
+          ) : (
+            <li className='py-2 px-3 cursor-pointer text-primary hover:bg-gray-100 transition rounded-sm'><Link to="/login">Login</Link></li>
+          )}
+        </ul>
+        <span className='md:hidden cursor-pointer' onClick={toggleNavbar}><i className="fa-solid fa-bars"></i></span>
 
-  test("toggles mobile menu on button click", async () => {
-    render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <Navbar />
-        </BrowserRouter>
-      </Provider>
-    );
 
-    // Find the menu toggle button
-    const menuButton = screen.getByTestId("menu-button");
-    expect(menuButton).toBeInTheDocument();
+        {/* Navbar displayed as sidebar on smaller screens */}
+        <div className={`absolute md:hidden right-0 top-0 bottom-0 transition ${(isNavbarOpen === true) ? 'translate-x-0' : 'translate-x-full'} bg-gray-100 shadow-md w-screen sm:w-9/12 h-screen`}>
+          <div className='flex'>
+            <span className='m-4 ml-auto cursor-pointer' onClick={toggleNavbar}><i className="fa-solid fa-xmark"></i></span>
+          </div>
+          <ul className='flex flex-col gap-4 uppercase font-medium text-center'>
+            {authState.isLoggedIn ? (
+              <>
+                <li className="bg-blue-500 text-white hover:bg-blue-600 font-medium transition py-2 px-3">
+                  <Link to='/tasks/add' className='block w-full h-full'> <i className="fa-solid fa-plus"></i> Add task </Link>
+                </li>
+                <li className='py-2 px-3 cursor-pointer hover:bg-gray-200 transition rounded-sm' onClick={handleLogoutClick}>Logout</li>
+              </>
+            ) : (
+              <li className='py-2 px-3 cursor-pointer text-primary hover:bg-gray-200 transition rounded-sm'><Link to="/login">Login</Link></li>
+            )}
+          </ul>
+        </div>
+      </header>
+    </>
+  )
+}
 
-    // Click to open the menu
-    fireEvent.click(menuButton);
-
-    // Ensure "Login" appears in the menu
-    const loginButton = await screen.findByText(/login/i);
-    expect(loginButton).toBeInTheDocument();
-
-    // Find and click the close button
-    const closeButton = screen.getByTestId("close-menu");
-    fireEvent.click(closeButton);
-
-    // Ensure menu disappears
-    expect(screen.queryByText(/login/i)).not.toBeInTheDocument();
-  });
-
-  test("shows login button when user is not logged in", async () => {
-    render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <Navbar />
-        </BrowserRouter>
-      </Provider>
-    );
-
-    // Ensure at least one login button is present
-    const loginButtons = await screen.findAllByText(/login/i);
-    expect(loginButtons.length).toBeGreaterThan(0);
-  });
-
-  test("shows logout button when user is logged in", async () => {
-    store = mockStore({
-      authReducer: { isLoggedIn: true },
-    });
-
-    render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <Navbar />
-        </BrowserRouter>
-      </Provider>
-    );
-
-    // Ensure at least one logout button is present
-    const logoutButtons = await screen.findAllByText(/logout/i);
-    expect(logoutButtons.length).toBeGreaterThan(0);
-  });
-});
-
+export default Navbar

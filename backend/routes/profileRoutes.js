@@ -1,7 +1,7 @@
 const express = require("express");  
 const router = express.Router();  
 const { getProfile } = require("../controllers/profileControllers");  
-const { verifyAccessToken } = require("../middlewares.js");  
+const { verifyAccessToken } = require("../middlewares/index.js");  
 
 // Initialize an Express router for handling profile-related routes  
 
