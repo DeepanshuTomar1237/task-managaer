@@ -49,6 +49,7 @@ if (process.env.NODE_ENV === "production") {
   );
 }
 
+
 // Start server only after connecting to MongoDB
 connectDB().then(() => {
   const port = process.env.PORT || 5000;
